@@ -4,7 +4,7 @@
     "name": "Box Sushi 10 pièces",
     "price": 80,
     "cat": "sushi",
-    "image": "images/sushi10.jpg",
+    "image": "sushi10.jpg",
     "description": "10 pièces • assortiment Sushi Délice",
     "available": true
   },
@@ -13,25 +13,25 @@
     "name": "Box Sushi 15 pièces",
     "price": 109,
     "cat": "sushi",
-    "image": "images/sushi15.jpg",
+    "image": "sushi15.jpg",
     "description": "15 pièces • assortiment généreux",
     "available": true
   },
   {
     "id": "sushi20",
     "name": "Box Sushi 20 pièces",
-    "price": 145,
+    "price": 139,
     "cat": "sushi",
-    "image": "images/sushi20.jpg",
+    "image": "sushi20.jpg",
     "description": "20 pièces • grand assortiment",
     "available": true
   },
   {
     "id": "sushi30",
     "name": "Box Sushi 30 pièces",
-    "price": 215,
+    "price": 219,
     "cat": "sushi",
-    "image": "images/sushi30.jpg",
+    "image": "sushi30.jpg",
     "description": "30 pièces • à partager",
     "available": true
   },
@@ -40,7 +40,7 @@
     "name": "Box Sushi 40 pièces",
     "price": 300,
     "cat": "sushi",
-    "image": "images/sushi40.jpg",
+    "image": "sushi40.jpg",
     "description": "40 pièces • grande box premium",
     "available": true
   },
@@ -49,7 +49,7 @@
     "name": "Box Sushi 50 pièces",
     "price": 390,
     "cat": "sushi",
-    "image": "images/sushi50.jpg",
+    "image": "sushi50.jpg",
     "description": "50 pièces • Family Box",
     "available": true
   },
@@ -58,7 +58,7 @@
     "name": "Box Sushi 70 pièces",
     "price": 600,
     "cat": "sushi",
-    "image": "images/sushi70.jpg",
+    "image": "sushi70.jpg",
     "description": "70 pièces • Family XXL",
     "available": true
   },
@@ -67,7 +67,7 @@
     "name": "Box Fry 10 pièces",
     "price": 85,
     "cat": "fry",
-    "image": "images/fry10.jpg",
+    "image": "fry10.jpg",
     "description": "10 pièces • crispy",
     "available": true
   },
@@ -76,7 +76,7 @@
     "name": "Box Fry 20 pièces",
     "price": 170,
     "cat": "fry",
-    "image": "images/fry20.jpg",
+    "image": "fry20.jpg",
     "description": "20 pièces • crispy à partager",
     "available": true
   },
@@ -85,7 +85,7 @@
     "name": "Box Fry 30 pièces",
     "price": 230,
     "cat": "fry",
-    "image": "images/fry30.jpg",
+    "image": "fry30.jpg",
     "description": "30 pièces • grand format crispy",
     "available": true
   },
@@ -94,7 +94,7 @@
     "name": "Box Fry 40 pièces",
     "price": 300,
     "cat": "fry",
-    "image": "images/fry40.jpg",
+    "image": "fry40.jpg",
     "description": "40 pièces • grande box crispy",
     "available": true
   },
@@ -103,7 +103,7 @@
     "name": "Box Fry 50 pièces",
     "price": 395,
     "cat": "fry",
-    "image": "images/fry50.jpg",
+    "image": "fry50.jpg",
     "description": "50 pièces • Family Fry",
     "available": true
   },
@@ -112,7 +112,7 @@
     "name": "Box Fry 60 pièces",
     "price": 460,
     "cat": "fry",
-    "image": "images/fry60.jpg",
+    "image": "fry60.jpg",
     "description": "60 pièces • Family XXL Fry",
     "available": true
   }
