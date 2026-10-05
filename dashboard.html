@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="fr" dir="ltr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dashboard — Sushi Délice Nador</title>
+<style>
+:root{--bg:#080808;--card:#121212;--gold:#d9a83f;--gold2:#f4d27b;--text:#fff;--muted:#bdb5a7;--line:#4e3b1f;--green:#2fbf71}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}header{position:sticky;top:0;z-index:5;background:#090909ee;backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:15px}header strong{color:var(--gold2);font-family:Georgia,serif;font-size:22px}main{max-width:1100px;margin:auto;padding:18px}.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:16px}h1,h2{font-family:Georgia,serif;color:var(--gold2)}h1{margin:0 0 6px}.muted{color:var(--muted)}label{display:block;color:var(--muted);font-size:13px;margin:10px 0 5px}input,select,textarea{width:100%;background:#0c0c0c;color:#fff;border:1px solid #5a4524;border-radius:10px;padding:11px;font-size:15px}textarea{min-height:70px;resize:vertical}.btn{border:0;border-radius:11px;padding:11px 15px;font-weight:800;cursor:pointer}.gold{background:var(--gold);color:#080808}.dark{background:#222;color:#fff;border:1px solid #5a4524}.danger{background:#4a1515;color:#fff}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}.product{border:1px solid #3f311c;border-radius:16px;padding:14px;background:#101010}.product img{width:100%;height:180px;object-fit:contain;background:#080808;border-radius:12px;margin-bottom:10px}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.top{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.status{padding:7px 10px;border-radius:999px;background:#183522;color:#8ff0b7;font-size:12px}.hidden{display:none}.note{background:#17130d;border:1px solid #5a4524;border-radius:12px;padding:12px;color:#e8d9b5}.search{max-width:420px}.small{font-size:12px}.file{padding:9px 0}
+</style></head>
+<body>
+<header><strong>🍣 Sushi Délice Nador — Dashboard</strong></header>
+<main>
+<div class="panel">
+<h1>Administration</h1>
+<div class="muted">بدّل الثمن، الوصف، الصورة أو disponibilité، ومن بعد دير Publier.</div>
+<div class="note" style="margin-top:12px">🔐 Token GitHub كيبقى غير فهاد الصفحة وما كنخزنوهش.</div>
+<label>GitHub Personal Access Token</label><input id="token" type="password" placeholder="github_pat_...">
+<div class="actions"><button class="btn gold" onclick="connect()">Connecter</button><span id="status" class="status hidden">Connecté</span></div>
+</div>
+<div id="app" class="hidden">
+<div class="panel"><div class="top"><input id="search" class="search" placeholder="Rechercher un produit..." oninput="render()"><button class="btn dark" onclick="load()">↻ Recharger</button><button class="btn gold" onclick="publish()">Publier products.json</button></div></div>
+<div id="products" class="grid"></div>
+</div>
+</main>
+<script>
+const OWNER="sushihomenador",REPO="SushiDeliceNador",BRANCH="main";
+let products=[],token="";
+async function api(path,opts={}){const r=await fetch("https://api.github.com"+path,{...opts,headers:{Accept:"application/vnd.github+json",Authorization:"Bearer "+token,...(opts.headers||{})}});if(!r.ok)throw new Error((await r.text()).slice(0,300));return r.json()}
+function connect(){token=document.getElementById("token").value.trim();if(!token)return alert("دخل GitHub Token");load().then(()=>{document.getElementById("app").classList.remove("hidden");document.getElementById("status").classList.remove("hidden")}).catch(e=>alert("Token أو الصلاحيات غير صحيحة: "+e.message))}
+async function load(){const r=await api("/repos/"+OWNER+"/"+REPO+"/contents/products.json?ref="+BRANCH);products=JSON.parse(atob(r.content.replace(/\n/g,"")));render()}
+function render(){const q=(document.getElementById("search")?.value||"").toLowerCase();const el=document.getElementById("products");el.innerHTML=products.filter(p=>(p.name+" "+p.cat).toLowerCase().includes(q)).map((p,i)=>'<div class="product">'+(p.image?'<img src="'+p.image+'" onerror="this.style.opacity=.2">':'<div style="height:180px;display:grid;place-items:center;color:#806f50">Pas de photo</div>')+
+'<label>Nom</label><input value="'+esc(p.name)+'" onchange="setp('+i+',\'name\',this.value)">'+
+'<div class="row"><div><label>Prix DH</label><input type="number" value="'+p.price+'" onchange="setp('+i+',\'price\',Number(this.value))"></div><div><label>Catégorie</label><select onchange="setp('+i+',\'cat\',this.value)"><option '+(p.cat=="sushi"?"selected":"")+'>sushi</option><option '+(p.cat=="fry"?"selected":"")+'>fry</option><option '+(p.cat=="classic"?"selected":"")+'>classic</option><option '+(p.cat=="drinks"?"selected":"")+'>drinks</option></select></div></div>'+
+'<label>Description</label><textarea onchange="setp('+i+',\'description\',this.value)">'+esc(p.description||"")+'</textarea>'+
+'<label class="file">Nouvelle photo</label><input type="file" accept="image/*" onchange="uploadPhoto('+i+',this.files[0])">'+
+'<div class="actions"><button class="btn '+(p.available?"gold":"dark")+'" onclick="setp('+i+',\'available\',!products['+i+'].available);render()">'+(p.available?"Disponible":"Masqué")+'</button><button class="btn dark" onclick="saveOne('+i+')">💾 Enregistrer</button></div></div>').join("")}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]))}
+function setp(i,k,v){products[i][k]=v}
+async function saveOne(i){await publish();alert("Produit publié ✅")}
+async function publish(){const old=await api("/repos/"+OWNER+"/"+REPO+"/contents/products.json?ref="+BRANCH);const content=btoa(unescape(encodeURIComponent(JSON.stringify(products,null,2))));await api("/repos/"+OWNER+"/"+REPO+"/contents/products.json",{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({message:"Update catalogue from dashboard",content,sha:old.sha,branch:BRANCH})});alert("Catalogue publié sur GitHub ✅")}
+async function uploadPhoto(i,file){if(!file)return;try{const ext=(file.name.split(".").pop()||"jpg").toLowerCase().replace(/[^a-z0-9]/g,"");const path="images/"+products[i].id+"."+ext;const old=await fetch("https://api.github.com/repos/"+OWNER+"/"+REPO+"/contents/"+path+"?ref="+BRANCH,{headers:{Authorization:"Bearer "+token,Accept:"application/vnd.github+json"}});let sha=null;if(old.ok)sha=(await old.json()).sha;const b64=await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(",")[1]);r.onerror=rej;r.readAsDataURL(file)});const body={message:"Update product photo "+products[i].id,content:b64,branch:BRANCH};if(sha)body.sha=sha;await api("/repos/"+OWNER+"/"+REPO+"/contents/"+path,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});products[i].image=path;await publish();render();alert("الصورة ترفعات وتربطات بالمنتج ✅")}catch(e){alert("مشكل فرفع الصورة: "+e.message)}}
+</script></body></html>
